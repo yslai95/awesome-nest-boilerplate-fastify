@@ -2,7 +2,7 @@ import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
 import { Catch, UnprocessableEntityException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { ValidationError } from 'class-validator';
-import type { Response } from 'express';
+import type { FastifyReply } from 'fastify';
 import _ from 'lodash';
 
 @Catch(UnprocessableEntityException)
@@ -11,16 +11,19 @@ export class HttpExceptionFilter
 {
   constructor(public reflector: Reflector) {}
 
-  catch(exception: UnprocessableEntityException, host: ArgumentsHost): void {
+  async catch(
+    exception: UnprocessableEntityException,
+    host: ArgumentsHost,
+  ): Promise<void> {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
+    const response = ctx.getResponse<FastifyReply>();
     const statusCode = exception.getStatus();
     const r = exception.getResponse() as { message: ValidationError[] };
 
     const validationErrors = r.message;
     this.validationFilter(validationErrors);
 
-    response.status(statusCode).json(r);
+    await response.status(statusCode).send(r);
   }
 
   private validationFilter(validationErrors: ValidationError[]): void {

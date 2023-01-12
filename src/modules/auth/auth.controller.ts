@@ -51,7 +51,7 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: UserDto, description: 'Successfully Registered' })
-  @ApiFile({ name: 'avatar' })
+  @ApiFile([{ name: 'avatar' }])
   async userRegister(
     @Body() userRegisterDto: UserRegisterDto,
     @UploadedFile() file?: IFile,

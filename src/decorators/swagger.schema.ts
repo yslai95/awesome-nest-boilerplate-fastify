@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types,@typescript-eslint/no-unsafe-argument */
+import {
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nest-lab/fastify-multer/src/lib/interceptors';
 import type { Type } from '@nestjs/common';
 import { applyDecorators, UseInterceptors } from '@nestjs/common';
 import {
@@ -6,7 +10,6 @@ import {
   ROUTE_ARGS_METADATA,
 } from '@nestjs/common/constants';
 import { RouteParamtypes } from '@nestjs/common/enums/route-paramtypes.enum';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import {
   ApiBody,
   ApiConsumes,
